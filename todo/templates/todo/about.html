@@ -1,0 +1,19 @@
+{% extends 'todo/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% block sidebar %} {% include 'todo/navigation.html' %} {% endblock sidebar %}
+
+<div>
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome on ToDo App</h1>
+        <p class="lead">This is a full fetured ToDo App for Making your day Awesome & Productive. You can list your task for the whole day and
+            use your valuable time in your important work! 
+        </p>
+        <hr class="my-4">
+        <p><i class="fa fa-tasks" aria-hidden="true"></i> Do Your Work On Time, For Any query ask me on below link</p>
+        <a class="btn btn-primary btn-lg" href="https://www.aman-g.com" role="button">Learn more</a>
+      </div>
+</div>
+
+
+{% endblock content %}

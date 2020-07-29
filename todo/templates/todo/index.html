@@ -1,0 +1,125 @@
+{% extends 'todo/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% block sidebar %} {% include 'todo/navigation.html' %} {% endblock sidebar %}
+<div class="container-fluid p-0 m-0">
+
+    <div class="row">
+        <div class="col-9">
+            <div class="row mt-3 ml-3">
+                <div class="col-12" style="max-height:70vh;overflow-y: auto;min-height: 70vh;">
+                    <h3 class="m-2">Active Task...</h3>
+                    <div class="card-deck">
+                        {% for list in todoListItems  %}
+                        <div class="card border-danger m-2" style="max-width: 19rem; min-width:18rem;
+                        -webkit-box-shadow: 0px 0px 2.5px -1px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 2.5px -1px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 2.5px -1px rgba(0,0,0,0.75)
+                        ">
+                            <div class="card-header bg-transparent border"> <small><i class="fa fa-clock-o" aria-hidden="true"></i> Created On <strong>
+                                    {{list.created_on | date:'D d M Y' }}</strong> at: <strong>
+                                    {{list.created_on | time:"f A"}} </strong> </small></div>
+                            <div class="card-body">
+                                <h5 class="card-title text-info" style="font-size:18px;color: #5e35b1;"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{list.title}}</h5>
+                                <p class="card-text text-dark" style="font-size:16px;font-family: cursive;color: #9e9e9e;padding-left: 5px;"> {{list.details}}</p>
+                            </div>
+                            <div class="card-footer bg-transparent border">
+                                <div class="row">
+                                    <div class="col-5">
+                                   <form method="POST" action="{{list.id}}/complete">
+                                    {% csrf_token %}
+                                    <input type="checkbox" onchange="this.form.submit()" id="forcomplete">
+                                    <label for="forcomplete"><small>Completed</small></label>   
+                                </form>
+                                    </div>
+                                    <div class="col-7">
+                                        <a href="{% url 'update' list.id %}" class="btn btn-info" style="font-size: 12px;"><i class="fa fa-pencil-square-o" style="color: whitesmoke;" aria-hidden="true"></i> Edit</a>
+
+                                        <a href="{% url 'delete' list.id %}" class="btn btn-danger" style="font-size: 12px;"><i class="fa fa-trash-o" aria-hidden="true" style="color: whitesmoke;"></i> Delete</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="row p-3">
+                <div class="col-6">
+                    <hr>
+                    <button class="mybtn" data-toggle="modal" data-target="#exampleModal"
+                     style="padding: 12px 10px; border-radius: 22px; width: 100%; font-size: 20px; border-color: blue;"><i class="fa fa-plus-square-o" style="color: whitesmoke;" aria-hidden="true"></i> Add Task</button>
+                </div>
+                <div class="col-6">
+                    <hr>
+                    <form method="POST" action="deleteAll">
+                        {% csrf_token %}
+                    <button class="mybtn" onclick="this.form.submit()"
+                     style="padding: 12px 10px; border-radius: 22px; width: 100%; font-size: 20px; border-color: blue;"><i class="fa fa-trash-o" style="color: whitesmoke;" aria-hidden="true"></i> Delete All
+                       </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-3" style="background-color: #eeeeee;">
+
+                <div style="max-height: 95vh ;overflow-y: auto;">
+                <h3 class="p-2 text-center">Completed Task</h3>
+                {% for completed in completedItem %}
+                <div class="card m-2 border-success">
+                    <div class="card-header"> <small>
+                        On: <strong> {{completed.created_on | date:'D d M Y' }}</strong> at: <strong>
+                            {{completed.created_on | time:"f A"}} </strong>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title" style="font-size: 17px;"><i class="fa fa-check-square" aria-hidden="true"></i> {{completed.title}}</h6>
+                        <p class="card-text" style="font-size: 15px;font-family: cursive;padding-left: 7px;">{{completed.details}}</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="checkbox" id="complete" name="complete" value="Completed" checked>
+                                <label for="complete"> <small>Completed</small></label>
+                            </div>
+                            <div class="col-6">
+                                <div class="pull-right"><a href="{% url 'delete' completed.id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+<!-- Button trigger modal -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal"data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-plus-square-o" style="color:black;" aria-hidden="true"></i> Add New Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" id="saveForm" name="TodoListForm">
+                {% csrf_token %}
+
+                {{form | crispy }}
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="reset" onclick="this.form.reset()" form="saveForm" class="btn btn-secondary" data-dismiss="modal">Discard</button>
+          <button type="submit" form="saveForm" class="btn btn-primary"><i class="fa fa-bookmark" style="color: whitesmoke;" aria-hidden="true"></i> Save Task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

@@ -1,0 +1,39 @@
+{% extends 'todo/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% block sidebar %} {% include 'todo/navigation.html' %} {% endblock sidebar %}
+
+<div class="container-fluid m-0 p-0">
+    <div class="row">
+        <div class="col-3">
+
+        </div>
+        <div class="col-6">
+
+            <div class="card" style="margin-top: 30%;
+            -webkit-box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.75);
+            ">
+                <div class="card-body">
+                  <h5 class="card-title">Are you sure?</h5>
+                  <p class="card-text"> <i class="fa fa-info-circle" aria-hidden="true"></i> The Item will be deleted permanently </p>
+                  <form method="POST" >
+                    {% csrf_token %}
+                    {{form | crispy}}
+                    <button type="submit" class="btn pull-left ml-3 mr-1" style="width: 40%; background-color: #e65100;color: whitesmoke;"> Yes, Delete </button> 
+                </form>
+                    <a class="btn pull-right mr-3 ml-1" href="/" style="width: 40%; background-color:#42a5f5;color: whitesmoke;"> Cancle </a>
+                </div>
+              </div>
+        </div>
+        <div class="col-3">
+
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

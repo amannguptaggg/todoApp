@@ -1,0 +1,17 @@
+body{
+
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: thistle;
+}
+
+.mybtn{
+    background-color:#81c784;
+    color: white;
+}
+
+.mybtn:focus{
+    outline: none;
+    box-shadow: none;
+}
